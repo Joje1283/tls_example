@@ -1,5 +1,5 @@
-# https_example
-https_example in python
+# tls_example
+tls_example in python
 
 ## openssl command
 ### source - https://namjackson.tistory.com/24
