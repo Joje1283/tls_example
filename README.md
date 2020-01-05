@@ -1,23 +1,17 @@
 # tls_example
 tls_example in python
 
+
+
 ## openssl command
-### source - https://namjackson.tistory.com/24
-<pre><code># 개인키, 공개키 발급 과정 - private.key, public.key
-$ openssl genrsa -des3 -out private.key 2048 // 개인키
-$ openssl genrsa -out private.key 2048 // 비밀번호 없는 개인키 (선택사항)
-$ openssl rsa -in private.key -pubout -out public.key
+source: https://mylko72.gitbooks.io/node-js/content/chapter8/chapter8_4.html
 
-# CSR(인증요청서: SSL인증의 정보를 암호화하여 인증기관에 보내 인증서를 발급받게 하는 신청서. 국가코드, 도시, 회사명, 부서명, 이메일, 도메인주소 등이 있음.) 만들기 - private.csr
-$ openssl req -new -key private.key -out private.csr
+TLS 서버와 클라이언트를 구현하기 위해서는 양쪽에서 개인키와 공개인증서를 생성해야 한다.  
+openSSL을 이용해서 다음과 같이 생성할 수 있다.
 
-# CRT(인증서)만들기. - private.crt)
-## 사설 CA로부터 인증받은 인증서를 만들기 위해서 서명을 해줄 rootCA를 생성한다.
-$ openssl genrsa -aes256 -out rootCA.key 2048
-
-## rootCA 사설 CSR 생성하기 - rootCA.key를 이용해서 10년짜리 rootCA.pem(이게 CSR인듯>)을 생성.
-$ openssl req -x509 -new -nodes -key rootCA.key -days 3650 -out rootCA.pem
-
-## CRT 생성 - CSR(private.csr)을 커스텀CA인 rootCA의 인증을 받아(rootCA.key, rootCA.pem) 인증서(private.crt)를 생성한다.
-$ openssl x509 -req -in private.csr -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out private.crt -days 3650
+<pre><code>$ openssl genrsa -out server.pem 2048  // 개인키 생성 (server.pem
+$ openssl req -new -key server.pem -out server.csr  // 서명한 인증파일 생성 (server.csr)
+$ openssl x509 -req -days 365 -in server.csr -signkey server.pem -out server.crt // 자신이 서명한 인증서 생성 (server.crt)
 </code></pre>
+
+클리아언트도 위와 같은 같은 방법으로 생성한다.
